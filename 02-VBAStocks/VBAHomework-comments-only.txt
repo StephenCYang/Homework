@@ -1,0 +1,108 @@
+Sub VBAHomework()
+
+' Create a script that will loop through all the stocks for one year and output
+' the following information.
+
+' - The ticker symbol.
+' - Yearly change from opening price at the beginning of a given year to the
+'   closing price at the end of that year.
+' - The percent change from opening price at the beginning of a given year to
+'   the closing price at the end of that year.
+' - The total stock volume of the stock.
+' - You should also have conditional formatting that will highlight positive
+'   change in green and negative change in red.
+
+
+
+' Initialize some variables
+
+' Assuming row 1 is headers, set the beginning result row to 2.
+
+' Set the initial opening price for the first record from column 3 (aka C).
+
+' Initialize the TotalStockVolume to 0
+
+' Initialize Greatest % Increase variables
+
+' Initialize Greatest % Decrease variables
+
+' Initialize GreatestVolume variables
+
+' Headers and legends
+Range("j1") = "Ticker"
+Range("k1") = "Yearly Change"
+Range("L1") = "Percent Change"
+Range("M1") = "Total Stock Volume"
+Range("Q1") = "Ticker"
+Range("R1") = "Value"
+
+Range("P2") = "Greatest % Increase"
+Range("P3") = "Greatest % Decrease"
+Range("P4") = "Greatest Total Volume"
+
+' This assumes all ticker names are sorted by ticker name and date.
+
+
+
+' Start from row 2, because row 1 is headers.
+
+' Are we at the end of the table?
+
+    ' Check to see if the ticker name changes.
+
+        ' If the names don't match, it's a new stock.
+    
+            ' write these out the Ticker name
+
+            
+            ' get the closing price from column 6 (aka F).
+
+        
+            ' Calculate the change in price
+        
+            ' Set the cell color. Positive is Green, Negative is Red, 0 is no change.
+        
+            ' write the change to column 11.
+        
+            ' Calc percentage change. Check for 0 value to avoid Range errors.
+           
+            
+            ' Write the percent change to column 12 (aka L) in percent format.
+        
+            ' Write the total stock volume
+           
+            ' Check for Greatest Increase and update values as needed.
+                    
+            ' Check for Greatest Decrease and update values as needed.
+                    
+            ' Check for Greatest Volume and update as needed.
+			
+            ' Reset the TotalStockVolume to 0 
+            
+            ' Get the next OpeningPrice
+                                              
+            ' Basically, if the next opening price is 0, and that we haven't reached the end of the table,
+            ' and the ticker name hasn't changed, we check the line after it and use the opening pricefrom there.
+                        
+            ' Iterate the current output row
+        
+    
+        ' Else we accumulate the stock volume from column 7 (aka G) starting with the next row.
+        
+' Increment the row number we're looking at.
+
+' Once you reach the end of the sheet:
+    
+' Write the Greatests
+Range("q2") = GreatestIncreaseTicker
+Range("r2") = Format(GreatestIncreasePercentage, "Percent")
+Range("q3") = GreatestDecreaseTicker
+Range("r3") = Format(GreatestDecreasePercentage, "Percent")
+Range("q4") = GreatestVolumeTicker
+Range("r4") = GreatestVolumeTotal
+
+MsgBox ("Completed!")
+
+End Sub
+
+

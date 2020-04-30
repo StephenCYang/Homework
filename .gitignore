@@ -1,0 +1,5 @@
+.ipynb_checkpoints/
+_pycache_/
+api_keys.py
+google_key.py
+Open_Weather_key_config.py
