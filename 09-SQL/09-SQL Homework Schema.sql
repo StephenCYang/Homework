@@ -29,7 +29,8 @@ CREATE TABLE salaries (
 CREATE TABLE dept_manager (
     dept_no varchar   NOT NULL,
     emp_no int   NOT NULL,
-	foreign key (dept_no) references departments(dept_no)
+	foreign key (dept_no) references departments(dept_no),
+	foreign key (emp_no) references employees(emp_no)
 	);
 
 CREATE TABLE dept_emp (
@@ -38,3 +39,5 @@ CREATE TABLE dept_emp (
     foreign key (dept_no) references departments(dept_no),
 	foreign key (emp_no) references employees(emp_no)
 	);
+	
+	
