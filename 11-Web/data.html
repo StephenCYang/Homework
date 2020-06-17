@@ -50,34 +50,35 @@
     <div class="container px-lg-5 bg-light">
         <div class="row mx-lg-n5">
             
-            <div class="col-8">
-                <h1>Summary of Data</h1>
+            <div class="col-12">
+                <h1>Data</h1>
                 <hr>
                 <p>
-                    The data here is in CSV format, with the following keys:
+                    The following table includes all of the data used for plotting during this project.
                 </p>
-                <ul>
-                    <li>City_ID: Unique record number</li>
-                    <li>City: City</li>
-                    <li>Cloudiness: How cloudy it gets</li>
-                    <li>Country: The 2-character country code</li>
-                    <li>Date: Date the measurement was recorded</li>
-                    <li>Humidity: Level of humidity in percent</li>
-                    <li>Lat: Latitude</li>
-                    <li>Lng: Longitude</li>
-                    <li>Max Temp: Highest temperature in Farenheit</li>
-                    <li>Wind Speed: In knots</li>
-                </ul>
+                
+                <script src="https://d3js.org/d3.v5.min.js"></script>
+
+                <script type="text/javascript"charset="utf-8">
+                    d3.text("Resources\cities.csv", function(data) {
+                    var parsedCSV = d3.csv.parseRows(data);
+
+                    var container = d3.select("body")
+                        .append("table")
+
+                        .selectAll("tr")
+                            .data(parsedCSV).enter()
+                            .append("tr")
+
+                        .selectAll("td")
+                            .data(function(d) { return d; }).enter()
+                            .append("td")
+                            .text(function(d) { return d; });
+                });
+                </script>
+
             </div>
-            <div class="col-4">
-                <h2>Data</h2>
-                <hr>
-                <p>
-                    The dataset is freely available for use.<br>
-                    You may download it from here:
-                </p>
-                <a href="#">cities.csv</a>
-            </div>
+            
         </div>
     </div>
 </body>
