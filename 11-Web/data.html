@@ -9,6 +9,18 @@
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 
         <title>Latitude - Data</title>
+        
+        <style>
+		table {
+		  margin: 0 auto;
+		  text-align: center;
+          width: 80%;
+          margin-left: auto;
+          margin-right: auto;
+		}
+		 
+		
+	    </style>
     </head>
 <body>
     <!-- Optional JavaScript -->
@@ -57,27 +69,18 @@
                     The following table includes all of the data used for plotting during this project.
                 </p>
                 
-                <script src="https://d3js.org/d3.v5.min.js"></script>
-
-                <script type="text/javascript"charset="utf-8">
-                    d3.text("Resources\cities.csv", function(data) {
-                    var parsedCSV = d3.csv.parseRows(data);
-
-                    var container = d3.select("body")
-                        .append("table")
-
-                        .selectAll("tr")
-                            .data(parsedCSV).enter()
-                            .append("tr")
-
-                        .selectAll("td")
-                            .data(function(d) { return d; }).enter()
-                            .append("td")
-                            .text(function(d) { return d; });
-                });
+                <script src="CsvToTable.js"></script>
+                
+                <script>
+                    var csvtotable = new CsvToTable({
+                        csvFile: 'Resources/cities.csv'
+                    });
+                    csvtotable.run();
                 </script>
-
+                
+                
             </div>
+            
             
         </div>
     </div>
