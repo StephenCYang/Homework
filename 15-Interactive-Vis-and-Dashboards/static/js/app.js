@@ -6,8 +6,8 @@ d3.json("samples.json").then(function(data){
     var metadata = data.metadata;
     var samples = data.samples;
     
-    // Initial loading of the data to dashboard
-    sampleMetadata.html("");
+    
+    sampleMetadata.html(""); //Good old inner HTML
     Object.entries(metadata[0]).forEach(function([key, value]){
         sampleMetadata.append("p").text(`${key}: ${value}`)});
 
@@ -15,20 +15,14 @@ d3.json("samples.json").then(function(data){
     initializeBubbleChart(samples[0]);
     initializeGauge(metadata[0]);
 
-    // User selection
     testSubjectID.forEach(function(subject, index){
         var subjectSelection = selector.append("option")
         subjectSelection.attr("value", index).text(subject)});
     
-    // Updates based on user selection
     selector.on("change",updateChart);
 
     function updateChart(event){
         var selectValues = selector.property("value");
-        console.log(selectValues);
-        console.log(samples[selectValues]);
-        console.log(metadata[selectValues]);
-        
         sampleMetadata.html("");
         Object.entries(metadata[selectValues]).forEach(function([key, value]){
             sampleMetadata.append("p").text(`${key}: ${value}`)});
@@ -38,23 +32,24 @@ d3.json("samples.json").then(function(data){
         updateGauge(metadata[selectValues]);
     };});
 
-    function initializeBarChart(selected_sample){
-        // Display the first 10 OTUs found in that individual
-        var bar_labels = selected_sample.otu_ids.slice(0,10);
-        var bar_values = selected_sample.sample_values.slice(0,10);
-        var bar_hovertext = selected_sample.otu_labels.slice(0,10);
+    function initializeBarChart(selectedSubjectID){
+        // Display the first 10 OTUs found in that individual. I can't figure out how to combine 
+        // these into a bunch of records/objects/whatever to do a proper sort.
+        var barLabels = selectedSubjectID.otu_ids.slice(0,10);
+        var barValues = selectedSubjectID.sample_values.slice(0,10);
+        var barText = selectedSubjectID.otu_labels.slice(0,10);
         
-        var trace1 = {
-            x : bar_values.reverse(),
-            y : bar_labels.map(data=>`OTU-${data}`).reverse(),
-            text: bar_hovertext.reverse(),
+        var barChartData = {
+            x : barValues.reverse(),
+            y : barLabels.map(data=>`OTU-${data}`).reverse(),
+            text: barText.reverse(),
             type : "bar",
             orientation : "h"
         };
         
-        var bar_data = [trace1];
+        var bar_data = [barChartData];
         var layout = {
-            title: `<b>Top 10 Microbial Species Found</b>`,
+            title: `Top 10 Microbial Species Found`,
             xaxis:{title:"Amount Found"},
             yaxis:{title: "OTU ID"}
         };
@@ -62,33 +57,33 @@ d3.json("samples.json").then(function(data){
         Plotly.newPlot("bar", bar_data, layout, config);
     };
 
-    function updateBarChart(selected_sample){
-        var bar_labels = selected_sample.otu_ids.slice(0,10);
-        var bar_values = selected_sample.sample_values.slice(0,10);
-        var bar_hovertext = selected_sample.otu_labels.slice(0,10);
-        var update = { title: `<b>Top 10 Microbial Species Found</b>`};
+    function updateBarChart(selectedSubjectID){
+        var barLabels = selectedSubjectID.otu_ids.slice(0,10);
+        var barValues = selectedSubjectID.sample_values.slice(0,10);
+        var barText = selectedSubjectID.otu_labels.slice(0,10);
+        var update = { title: `Top 10 Microbial Species Found`};
 
-        Plotly.restyle("bar","x",[bar_values.reverse()]);
-        Plotly.restyle("bar","y",[bar_labels.map(data=>`OTU-${data}`).reverse()]);
-        Plotly.restyle("bar","text",[bar_hovertext.reverse()]);
+        Plotly.restyle("bar","x",[barValues.reverse()]);
+        Plotly.restyle("bar","y",[barLabels.map(data=>`OTU-${data}`).reverse()]);
+        Plotly.restyle("bar","text",[barText.reverse()]);
         Plotly.relayout("bar",update)
     };
 
-    function initializeBubbleChart(selected_sample){
-        var bubble_otu_id = selected_sample.otu_ids;
-        var bubble_value = selected_sample.sample_values;
-        var bubble_text_values = selected_sample.otu_labels;
+    function initializeBubbleChart(selectedSubjectID){
+        var bubbleOtuID = selectedSubjectID.otu_ids;
+        var bubbleValues = selectedSubjectID.sample_values;
+        var bubbleLabels = selectedSubjectID.otu_labels;
         
         var trace = {
-            x : bubble_otu_id,
-            y : bubble_value,
+            x : bubbleOtuID,
+            y : bubbleValues,
             mode: "markers",
             marker: {
-                size: bubble_value,
-                color: bubble_otu_id,
-                colorscale: "Rainbow"
+                color: bubbleOtuID,
+                colorscale: "Rainbow",
+                size: bubbleValues
             },
-            text: bubble_text_values
+            text: bubbleLabels
         };
 
         var layout = {
@@ -104,27 +99,28 @@ d3.json("samples.json").then(function(data){
         Plotly.newPlot("bubble",bubble_data,layout,config);
     };
 
-    function updateBubbleChart(selected_sample){
-        var bubble_otu_id = selected_sample.otu_ids;
-        var bubble_value = selected_sample.sample_values;
-        var bubble_text_values = selected_sample.otu_labels;
+    function updateBubbleChart(selectedSubjectID){
+        var bubbleOtuID = selectedSubjectID.otu_ids;
+        var bubbleValues = selectedSubjectID.sample_values;
+        var bubbleLabels = selectedSubjectID.otu_labels;
         var update = {title: `<b>Microbial Species Found Per Sample</b>`};
         
-        Plotly.restyle("bubble","x",[bubble_otu_id]);
-        Plotly.restyle("bubble","y",[bubble_value]);
+        Plotly.restyle("bubble","x",[bubbleOtuID]);
+        Plotly.restyle("bubble","y",[bubbleValues]);
         Plotly.restyle("bubble","marker",[{
-            size: bubble_value,
-            color: bubble_otu_id,
+            size: bubbleValues,
+            color: bubbleOtuID,
             colorscale: "Rainbow"}
         ]),
-        Plotly.restyle("bubble","text",[bubble_text_values]);
+        Plotly.restyle("bubble","text",[bubbleLabels]);
         Plotly.relayout("bubble",update);
     };
 
     // I have no idea how to get an indicator needle!!
-    function initializeGauge(selected_sample) {
-        var wfreq = 0;
-        if (selected_sample.wfreq !== null){wfreq=selected_sample.wfreq};
+    function initializeGauge(selectedSubjectID) {
+        //Check for nulls.
+		var wfreq = 0;
+        if (selectedSubjectID.wfreq !== null){wfreq=selectedSubjectID.wfreq};
         var data = [
             {
             type: "indicator",
@@ -147,9 +143,9 @@ d3.json("samples.json").then(function(data){
     };    
 
     // This was such a PITA. I had to do a newPlot to get it to refresh the gauge...
-    function updateGauge(selected_sample) {
+    function updateGauge(selectedSubjectID) {
         var wfreq = 0;
-        if (selected_sample.wfreq !== null){wfreq=selected_sample.wfreq};
+        if (selectedSubjectID.wfreq !== null){wfreq=selectedSubjectID.wfreq};
         console.log(wfreq);
         var update = [
             { type: "indicator",
