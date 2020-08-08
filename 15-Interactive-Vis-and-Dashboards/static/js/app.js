@@ -90,7 +90,7 @@ d3.json("samples.json").then(function(data){
             width:"1100",
             height: "600",
             title: `<b>Microbial Species Found Per Sample</b>`,
-            showlegend: false,  xaxis:{title:"OTU ID"},
+            showlegend: false, xaxis:{title:"OTU ID"},
             yaxis:{title: "Amount Per Sample"}
         };
 
@@ -116,7 +116,7 @@ d3.json("samples.json").then(function(data){
         Plotly.relayout("bubble",update);
     };
 
-    // I have no idea how to get an indicator needle!!
+    // I still have no idea how to get an indicator needle!!
     function initializeGauge(selectedSubjectID) {
         //Check for nulls.
 		var wfreq = 0;
