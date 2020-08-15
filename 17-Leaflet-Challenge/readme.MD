@@ -1,0 +1,3 @@
+# 17-Leaflet-Challenge
+
+Took me a while to get the legend working. Then it dawned on me that the css needed to be added... durrrr...
